@@ -1,0 +1,156 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <queue>
+#include <string.h>
+#include <algorithm>
+#define ll long long 
+using namespace std;
+
+ ll n;
+ ll rare_element=0;
+ ll a[100][100];
+ bool visit[100][100]={0};
+ ll dx[] = {0, 0, +1, -1};
+ ll dy[] = {+1, -1, 0, 0};
+ map<pair<ll,ll>,bool>mp;
+
+ bool is_valid(ll x,ll y)
+{
+  if( x>=1 && x<=n && y>=1 && y<=n && visit[x][y]==false && (a[x][y]==1) )
+  {
+    return true;
+  }
+  return false;
+}
+ll result=1e9+7;
+
+
+ll bfs(ll r,ll c)
+{
+  visit[r][c]=true;
+
+  ll ans=0;
+  ll level[100][100]={0};
+  level[r][c]=0;
+
+  queue< pair<ll,ll> >q;
+  q.push({r,c});
+
+   ll rare_found=0;
+
+  while(!q.empty())
+  {
+    ll src_x=q.front().first;
+    ll src_y=q.front().second;
+    q.pop();
+
+    for(int i=0;i<4;i++)
+     {
+      ll New_x=src_x+dx[i];
+      ll New_y=src_y+dy[i];
+
+
+      if(is_valid(New_x,New_y))
+      {
+     level[New_x][New_y]=level[src_x][src_y]+1;
+
+     if(mp[{New_x,New_y}]==true)
+     {
+      ans=max(ans,level[New_x][New_y]);
+     }
+     q.push({New_x,New_y});
+     
+      visit[New_x][New_y]=true;
+
+    }
+
+     }
+
+  }
+  return ans;
+  
+}
+
+
+
+
+
+void solve(ll test)
+{
+  cin>>n>>rare_element;
+
+
+
+  
+  for(int i=1;i<=25;i++)
+  {
+    for(int j=1;j<=25;j++)
+    {
+      visit[i][j]=false;
+      a[i][j]=0;
+    
+
+
+    }
+  }
+  mp.clear();
+
+
+
+
+  for(int i=1;i<=rare_element;i++)
+  {
+    ll k,l;
+    cin>>k>>l;
+    mp[{k,l}]=true;  
+  }
+
+
+
+  for(int i=1;i<=n;i++)
+  {
+    for(int j=1;j<=n;j++)
+    {
+      cin>>a[i][j];
+    }
+  }
+
+  result=1e9+7;
+  for(int i=1;i<=n;i++)
+  {
+    for(int j=1;j<=n;j++)
+    {
+      if(a[i][j]==1)
+      {
+        memset(visit,false,sizeof(visit));
+
+      ll x=bfs(i,j);
+      result=min(result,x);
+      }
+    }
+  }
+ cout<<result<<endl;
+
+
+
+
+}
+
+
+int main (){
+
+
+ #ifndef ONLINE_JUDGE
+ freopen ("input.txt","r", stdin);
+ freopen ("output.txt","w", stdout);
+ #endif
+  ios_base::sync_with_stdio(false);
+  cin.tie(NULL); 
+ 
+int t;cin>>t;for(ll i=1;i<=t;i++)
+solve(i);
+
+return 0;
+ 
+}
