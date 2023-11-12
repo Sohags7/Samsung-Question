@@ -1,0 +1,120 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <queue>
+#include <string.h>
+#include <algorithm>
+#define ll long long 
+using namespace std;
+ ll  n,m;
+ ll a[100][100]={0};
+ ll visit[100][100]={0};
+ ll level[100][100]={0};
+ //ll dx[]={+1,-1,0,0};
+ //ll dy[]={0,0,+1,-1};
+
+ll dx[] = {0, 0, +1, -1};
+ll dy[] = {+1, -1, 0, 0};
+ bool is_valid(ll x,ll y)
+ {
+  if(x>=1 && x<=m && y>=1 && y<=n && visit[x][y]==false && a[x][y]==1)
+    return true;
+  return false;
+
+ }
+
+
+ll bfs(ll r,ll c)
+ {
+  visit[r][c]=true;
+  level[r][c]=1;
+  queue<pair<ll,ll>>q;
+  q.push({r,c});
+  ll ans;
+
+  ans=0;
+
+
+  while(!q.empty())
+  {
+     ll  src_x=q.front().first;
+     ll src_y=q.front().second;
+     q.pop();
+
+     for(int i=0;i<4;i++)
+     {
+      ll x=src_x+dx[i];
+      ll y=src_y+dy[i];
+
+       if(is_valid(x,y))
+       {
+        level[x][y]=level[src_x][src_y]+1;
+         visit[x][y]=true;
+         ans=max(ans,level[x][y]);
+         q.push({x,y});
+
+       }
+
+     }
+
+  }
+  return ans;
+
+
+ } 
+
+
+void solve(ll test)
+{  
+
+for(int i=1;i<=85;i++)
+  {
+    for(int j=1;j<=85;j++)
+    {
+      a[i][j]=0;
+      visit[i][j]=0;
+      level[i][j]=0;
+
+    }
+  }
+
+
+
+  cin>>n>>m;
+ 
+
+  for(int i=1;i<=m;i++)
+  {
+    for(int j=1;j<=n;j++)
+    {
+      cin>>a[i][j];
+    }
+  }
+
+
+  ll src_x,src_y;
+  cin>>src_x>>src_y;
+  
+  ll x=bfs(src_x,src_y);
+
+cout<<x<<endl;
+
+
+
+}
+
+
+int main (){
+
+
+ #ifndef ONLINE_JUDGE
+ freopen ("input.txt","r", stdin);
+ freopen ("output.txt","w", stdout);
+ #endif
+  
+int t;cin>>t;for(ll i=1;i<=t;i++)
+solve(i);
+
+return 0;
+ 
+}
